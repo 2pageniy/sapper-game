@@ -1,0 +1,17 @@
+.cell {
+  box-sizing: border-box;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #7c7c7c;
+  background-color: #bebebe;
+  box-shadow: inset 1px 1px 1px 1px white, inset -1px -1px 1px 1px #7c7c7c;
+  cursor: pointer;
+}
+
+.cell:active {
+  box-shadow: none;
+}
+
+.cell.active {
+  box-shadow: none;
+}

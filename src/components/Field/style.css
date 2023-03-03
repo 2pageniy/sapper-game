@@ -1,0 +1,7 @@
+.field {
+  display: flex;
+  flex-wrap: wrap;
+  width: 400px;
+  height: 400px;
+  box-shadow: -1px -1px 0 1px #7e7e7e, 0 0 0 2px white;
+}

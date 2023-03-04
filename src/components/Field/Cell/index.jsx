@@ -1,33 +1,31 @@
-import { useState } from 'react';
 import './style.css'
 
-function Cell({ index, fillCells, cell, flag, clickedCell, rightClickCell }) {
-  const [opened, setOpened] = useState(false);
-
-
+function Cell({ index, fillCells, cell, flag, clickedCell, rightClickCell, lose }) {
+  
+  
   const clickCellHandler = () => {
     if (!flag) {
       fillCells(index);
       return;
     }
-    if (cell.flag) return;
+    if (cell.flag || lose) return;
     clickedCell(index);
   };
 
   const contextHandler = (e) => {
     e.preventDefault();
-    if (cell.clicked) return;
+    if (cell.clicked || lose) return;
     rightClickCell(index)
   };
+  
+  const classCell = `cell${cell.clicked ? ` open-${cell.cell}` : ''}${cell.flag ? ` flag-${cell.flag}` : ''}${cell.activate ? ` activate-mine` : ''}${lose ? ` lose` : ''}${cell.wrong ? ' wrong' : ''}`;
 
   return (
     <div
       onClick={clickCellHandler}
       onContextMenu={contextHandler}
-      className={`cell${cell.clicked ? ` open-${cell.cell}` : ''}${cell.flag ? ` flag-${cell.flag}` : ''}${cell.activate ? ` activate-mine` : ''}`}
+      className={classCell}
     >
-      {/* {cell.clicked && <div className='flag'/>} */}
-      {/* {cell.cell} */}
     </div>
   );
 }

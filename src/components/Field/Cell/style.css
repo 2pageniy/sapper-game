@@ -8,11 +8,15 @@
 }
 
 .cell:active {
-  background-position: -26px -79px;
+  background-position: -26.5px -79px;
+}
+
+.cell:active .smile {
+  background-position: -26.5px -79px;
 }
 
 .cell.open-0 {
-  background-position: -26px -79px;
+  background-position: -26.5px -79px;
 }
 
 .cell.open-1 {
@@ -24,7 +28,7 @@
 }
 
 .cell.open-3 {
-  background-position: -52px -105px;
+  background-position: -52.5px -105px;
 }
 
 .cell.open-4 {
@@ -48,7 +52,7 @@
 }
 
 .cell.open-mine {
-  background-position: -131px -79px;
+  background-position: -131.5px -79px;
 }
 
 .cell.flag-1 {
@@ -61,4 +65,12 @@
 
 .cell.activate-mine {
   background-position: -157px -79px;
+}
+
+.cell.lose {
+  cursor: auto;
+}
+
+.cell.wrong {
+  background-position: -184px -79px;
 }

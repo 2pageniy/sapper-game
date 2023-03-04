@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { GameContext } from '../../context';
 import Cell from './Cell';
 import getRandomInt from '../../utils/randomNumber';
 import './style.css'
@@ -8,6 +9,7 @@ function Field() {
   const [cells, setCells] = useState(Array.from(Array(size), () => new Array(size).fill(0)));
   const [minesPos, setMinesPos] = useState([]);
   const [flag, setFlag] = useState(false);
+  const {lose, setLose, restart, setRestart, setMines, mines} = useContext(GameContext);
 /*
   {
     cell: mine | number,
@@ -32,6 +34,7 @@ function Field() {
           clicked: false,
           flag: 0,
           activate: false,
+          wrong: false,
         }
         temp[randomCellI][randomCellJ] = mine;
         setMinesPos((prev) => [...prev, [randomCellI, randomCellJ]]);
@@ -59,36 +62,47 @@ function Field() {
           cell: allMines,
           clicked: false,
           flag: 0,
-          activate: false
+          activate: false,
+          wrong: false,
         }
       }
     }
-    setCells(temp);
+    clickCellHandler(index, temp);
   };
 
   const clickedCell = (idx) => {
+    clickCellHandler(idx, cells);
+  };
+
+  const clickCellHandler = (idx, cells) => {
     const temp = [...cells];
     const i = idx[0];
     const j = idx[1];
     temp[i][j].clicked = true;
 
-    if (cells[i][j].cell === 0) {
-      if (cells[i]?.[j + 1]     && !cells[i]?.[j + 1]?.clicked)     clickedCell([i, j + 1]);
-      if (cells[i]?.[j - 1]     && !cells[i]?.[j - 1]?.clicked)     clickedCell([i, j - 1]);
-      if (cells[i + 1]?.[j - 1] && !cells[i + 1]?.[j - 1]?.clicked) clickedCell([i + 1, j - 1]);
-      if (cells[i + 1]?.[j]     && !cells[i + 1]?.[j]?.clicked)     clickedCell([i + 1, j]);
-      if (cells[i + 1]?.[j + 1] && !cells[i + 1]?.[j + 1]?.clicked) clickedCell([i + 1, j + 1]);
-      if (cells[i - 1]?.[j - 1] && !cells[i - 1]?.[j - 1]?.clicked) clickedCell([i - 1, j - 1]);
-      if (cells[i - 1]?.[j]     && !cells[i - 1]?.[j]?.clicked)     clickedCell([i - 1, j]);
-      if (cells[i - 1]?.[j + 1] && !cells[i - 1]?.[j + 1]?.clicked) clickedCell([i - 1, j + 1]);
+    if (temp[i][j].cell === 0) {
+      if (temp[i]?.[j + 1]     && !temp[i]?.[j + 1]?.clicked)     clickCellHandler([i, j + 1], temp);
+      if (temp[i]?.[j - 1]     && !temp[i]?.[j - 1]?.clicked)     clickCellHandler([i, j - 1], temp);
+      if (temp[i + 1]?.[j - 1] && !temp[i + 1]?.[j - 1]?.clicked) clickCellHandler([i + 1, j - 1], temp);
+      if (temp[i + 1]?.[j]     && !temp[i + 1]?.[j]?.clicked)     clickCellHandler([i + 1, j], temp);
+      if (temp[i + 1]?.[j + 1] && !temp[i + 1]?.[j + 1]?.clicked) clickCellHandler([i + 1, j + 1], temp);
+      if (temp[i - 1]?.[j - 1] && !temp[i - 1]?.[j - 1]?.clicked) clickCellHandler([i - 1, j - 1], temp);
+      if (temp[i - 1]?.[j]     && !temp[i - 1]?.[j]?.clicked)     clickCellHandler([i - 1, j], temp);
+      if (temp[i - 1]?.[j + 1] && !temp[i - 1]?.[j + 1]?.clicked) clickCellHandler([i - 1, j + 1], temp);
     }
 
-    if (cells[i][j].cell === 'mine') {
+    if (temp[i][j].cell === 'mine') {
+      setLose(true);
       temp[i][j].activate = true;
-      for (let i = 0; i < minesPos.length; i++) {
-        const firstPos = minesPos[i][0];
-        const secondPos = minesPos[i][1];
-        temp[firstPos][secondPos].clicked = true;
+      for (let i = 0; i < temp.length; i++) {
+        for (let j = 0; j < temp[i].length; j++) {
+          if (temp[i][j].flag === 1 && temp[i][j].cell !== 'mine') {
+            temp[i][j].wrong = true;
+          }
+          if (temp[i][j].cell === 'mine') {
+            temp[i][j].clicked = true;
+          }
+        }
       }
     }
     setCells([...temp])
@@ -96,9 +110,28 @@ function Field() {
 
   const rightClickCell = (idx) => {
     const temp = [...cells];
+    if (temp[idx[0]][idx[1]].flag + 1 === 1 && mines === 0) {
+      return;
+    }
     temp[idx[0]][idx[1]].flag = (temp[idx[0]][idx[1]].flag + 1) % 3;
+    if (temp[idx[0]][idx[1]].flag === 1) {
+      setMines((prev) => prev - 1);
+    } else if (temp[idx[0]][idx[1]].flag === 2){
+      setMines((prev) => prev + 1);
+    }
     setCells(temp);
   };
+
+  useEffect(() => {
+    if (restart) {
+      setFlag(false);
+      setRestart(false);
+      setCells(Array.from(Array(size), () => new Array(size).fill(0)));
+      setMinesPos([]);
+      setLose(false);
+      setMines(40);
+    }
+  }, [restart])
 
   return (
     <div className="field">
@@ -113,6 +146,7 @@ function Field() {
             flag={flag}
             clickedCell={clickedCell}
             rightClickCell={rightClickCell}
+            lose={lose}
           />
           )
         )

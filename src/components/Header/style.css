@@ -1,9 +1,41 @@
 .header {
   display: flex;
   justify-content: space-between;
+  align-self: center;
   background-color: #c1c1c1;
   width: 400px;
   height: 50px;
   margin-bottom: 2px;
   box-shadow: -1px -1px 0 1px #7e7e7e, 0 0 0 2px white;
+}
+
+.timer {
+
+}
+
+.smile {
+  margin: auto;
+  width: 40px;
+  height: 40px;
+  background: url('../../assets/image/minesweeper-sprites_9TPZzv3.png');
+  background-size: 215px 130px;
+  background-position: -1px -39px;
+}
+
+.smile-lose {
+  background-position: -169px -39px;
+}
+
+.smile-win {
+  background-position: -127px -39px;
+}
+
+.smile:active {
+  background-position: -43px -39px;
+}
+
+
+
+.mine {
+
 }

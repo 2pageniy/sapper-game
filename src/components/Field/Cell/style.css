@@ -1,17 +1,64 @@
 .cell {
-  box-sizing: border-box;
   width: 25px;
   height: 25px;
-  border: 1px solid #7c7c7c;
-  background-color: #bebebe;
-  box-shadow: inset 1px 1px 1px 1px white, inset -1px -1px 1px 1px #7c7c7c;
+  background: url('../../../assets/image/minesweeper-sprites_9TPZzv3.png') no-repeat;
+  background-size: 215px 130px;
+  background-position: 0 -79px;
   cursor: pointer;
 }
 
 .cell:active {
-  box-shadow: none;
+  background-position: -26px -79px;
 }
 
-.cell.active {
-  box-shadow: none;
+.cell.open-0 {
+  background-position: -26px -79px;
+}
+
+.cell.open-1 {
+  background-position: 0 -105px;
+}
+
+.cell.open-2 {
+  background-position: -26px -105px;
+}
+
+.cell.open-3 {
+  background-position: -52px -105px;
+}
+
+.cell.open-4 {
+  background-position: -78px -105px;
+}
+
+.cell.open-5 {
+  background-position: -105px -105px;
+}
+
+.cell.open-6 {
+  background-position: -131px -105px;
+}
+
+.cell.open-7 {
+  background-position: -157px -105px;
+}
+
+.cell.open-8 {
+  background-position: -184px -105px;
+}
+
+.cell.open-mine {
+  background-position: -131px -79px;
+}
+
+.cell.flag-1 {
+  background-position: -52px -79px;
+}
+
+.cell.flag-2 {
+  background-position: -78px -79px;
+}
+
+.cell.activate-mine {
+  background-position: -157px -79px;
 }

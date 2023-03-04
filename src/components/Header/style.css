@@ -14,9 +14,9 @@
 }
 
 .smile {
-  margin: auto;
   width: 40px;
   height: 40px;
+  margin: auto 0;
   background: url('../../assets/image/minesweeper-sprites_9TPZzv3.png');
   background-size: 215px 130px;
   background-position: -1px -39px;
@@ -34,8 +34,54 @@
   background-position: -43px -39px;
 }
 
-
-
 .mine {
+  display: flex;
+  margin: auto 0;
+}
 
+.mine .pos {
+  width: 20px;
+  height: 35px;
+  background: url('../../assets/image/minesweeper-sprites_9TPZzv3.png');
+  background-size: 215px 130px;
+}
+
+.mine .pos-0 {
+  background-position: -195px 0px;
+}
+
+.mine .pos-1 {
+  background-position: 0 0;
+}
+
+.mine .pos-2 {
+  background-position: -22px 0px;
+}
+
+.mine .pos-3 {
+  background-position: -43px 0px;
+}
+
+.mine .pos-4 {
+  background-position: -65px 0px;
+}
+
+.mine .pos-5 {
+  background-position: -87px 0px;
+}
+
+.mine .pos-6 {
+  background-position: -108px 0px;
+}
+
+.mine .pos-7 {
+  background-position: -130px 0px;
+}
+
+.mine .pos-8 {
+  background-position: -152px 0px;
+}
+
+.mine .pos-9 {
+  background-position: -174px 0px;
 }

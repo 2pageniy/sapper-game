@@ -2,48 +2,38 @@ import { useEffect, useState, useContext } from 'react';
 import { GameContext } from '../../context';
 import Cell from './Cell';
 import getRandomInt from '../../utils/randomNumber';
+import { QUANTITY_MINES, SIZE_FIELD } from '../../consts';
 import './style.css'
 
 function Field() {
-  const size = 16;
-  const [cells, setCells] = useState(Array.from(Array(size), () => new Array(size).fill(0)));
-  const [minesPos, setMinesPos] = useState([]);
-  const [flag, setFlag] = useState(false);
+  const [cells, setCells] = useState(Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD).fill(0)));
+  const [filledCells, setFilledCells] = useState(false);
   const {lose, setLose, restart, setRestart, setMines, mines} = useContext(GameContext);
-/*
-  {
-    cell: mine | number,
-    clicked: false | true,
-    flag: 0 (empty) | 1 (flag) | 2 (question)
-  }
-*/
 
   const fillCells = (index) => {
-    setFlag(true);
-    const temp = Array.from(Array(size), () => new Array(size));
+    setFilledCells(true);
+    const temp = Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD));
     let i = 0;
-    while (i < 40) {
-      const randomCellI = getRandomInt(0, size);
-      const randomCellJ = getRandomInt(0, size);
+    while (i < mines) {
+      const randomCellI = getRandomInt(0, SIZE_FIELD);
+      const randomCellJ = getRandomInt(0, SIZE_FIELD);
       if (randomCellI === index[0] && randomCellJ === index[1]) {
         continue;
       }
       if (!temp[randomCellI][randomCellJ]) {
-        const mine = {
+        temp[randomCellI][randomCellJ] = {
           cell: 'mine',
           clicked: false,
           flag: 0,
           activate: false,
           wrong: false,
-        }
-        temp[randomCellI][randomCellJ] = mine;
-        setMinesPos((prev) => [...prev, [randomCellI, randomCellJ]]);
+        };
         i++;
       }
     }
 
-    for (let i = 0; i < size; i++) {
-      for (let j = 0; j < size; j++) {
+    for (let i = 0; i < SIZE_FIELD; i++) {
+      for (let j = 0; j < SIZE_FIELD; j++) {
         if (temp[i][j]?.cell === 'mine') {
           continue;
         }
@@ -124,12 +114,11 @@ function Field() {
 
   useEffect(() => {
     if (restart) {
-      setFlag(false);
+      setFilledCells(false);
       setRestart(false);
-      setCells(Array.from(Array(size), () => new Array(size).fill(0)));
-      setMinesPos([]);
+      setCells(Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD).fill(0)));
       setLose(false);
-      setMines(40);
+      setMines(QUANTITY_MINES);
     }
   }, [restart])
 
@@ -143,7 +132,7 @@ function Field() {
             index={[i, j]}
             cell={c}
             fillCells={fillCells}
-            flag={flag}
+            flag={filledCells}
             clickedCell={clickedCell}
             rightClickCell={rightClickCell}
             lose={lose}

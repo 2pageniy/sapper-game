@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import Cell from './Cell';
 import './style.css'
 import { GameContext } from '../../context';
+import { loseGame, winGame, openCell } from '../../utils/handlerClick';
 import fillArrayCells from '../../utils/fillArrayCells';
 import { QUANTITY_MINES, SIZE_FIELD } from '../../consts';
 
@@ -21,7 +22,7 @@ function Field() {
   const fillCells = (index) => {
     setTimer(setInterval(() => setSeconds((prev) => prev !== 999 ? prev + 1 : prev), 1000));
     setFilledCells(true);
-    const temp = fillArrayCells(index)
+    const temp = fillArrayCells(index);
     clickCellHandler(index, temp);
   };
 
@@ -30,49 +31,17 @@ function Field() {
   };
 
   const clickCellHandler = (idx, cells) => {
-    const temp = [...cells];
+    let temp = openCell(idx, cells);
     const i = idx[0];
     const j = idx[1];
     const pressedCell = temp[i][j];
-    pressedCell.open = true;
-
-    if (pressedCell.cell === 0) {
-      // Проверяем чтобы поле существовало, было закрыто и не было на нем флага или вопроса
-      if (temp[i]?.[j + 1]     && !temp[i][j + 1]?.open     && !temp[i][j + 1]?.flag)     clickCellHandler([i, j + 1], temp);
-      if (temp[i]?.[j - 1]     && !temp[i][j - 1]?.open     && !temp[i][j - 1]?.flag)     clickCellHandler([i, j - 1], temp);
-      if (temp[i + 1]?.[j - 1] && !temp[i + 1][j - 1]?.open && !temp[i + 1][j - 1]?.flag) clickCellHandler([i + 1, j - 1], temp);
-      if (temp[i + 1]?.[j]     && !temp[i + 1][j]?.open     && !temp[i + 1][j]?.flag)     clickCellHandler([i + 1, j], temp);
-      if (temp[i + 1]?.[j + 1] && !temp[i + 1][j + 1]?.open && !temp[i + 1][j + 1].flag)  clickCellHandler([i + 1, j + 1], temp);
-      if (temp[i - 1]?.[j - 1] && !temp[i - 1][j - 1]?.open && !temp[i - 1][j - 1]?.flag) clickCellHandler([i - 1, j - 1], temp);
-      if (temp[i - 1]?.[j]     && !temp[i - 1][j]?.open     && !temp[i - 1][j]?.flag)     clickCellHandler([i - 1, j], temp);
-      if (temp[i - 1]?.[j + 1] && !temp[i - 1][j + 1]?.open && !temp[i - 1][j + 1]?.flag) clickCellHandler([i - 1, j + 1], temp);
-    }
 
     if (pressedCell.cell === 'mine') {
       setGameResult('lose');
       clearInterval(timer);
-      pressedCell.activate = true;
-      for (let i = 0; i < temp.length; i++) {
-        for (let j = 0; j < temp[i].length; j++) {
-          const currentCell = temp[i][j];
-          if (currentCell.flag === 1 && currentCell.cell !== 'mine') {
-            currentCell.wrong = true;
-          }
-          if (currentCell.cell === 'mine') {
-            currentCell.open = true;
-          }
-        }
-      }
+      temp = [...loseGame(idx, cells)];
     } else {
-      let count = 0;
-      for (let i = 0; i < temp.length; i++) {
-        for (let j = 0; j < temp[i].length; j++) {
-          const currentCell = temp[i][j];
-          if (!currentCell.open) {
-            count++;
-          }
-        }
-      }
+      const count = winGame(cells);
       if (count === QUANTITY_MINES) {
         clearInterval(timer);
         setGameResult('win');
@@ -113,7 +82,7 @@ function Field() {
   }, [restart])
 
   return (
-    <div className="field">
+    <div className='field'>
       {cells.map((cell, i) => (
           cell.map((c, j) => 
           <Cell 

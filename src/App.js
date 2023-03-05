@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Header from "./components/Header";
-import Field from "./components/Field";
-import "./App.css";
-import { GameContext } from "./context";
-import { QUANTITY_MINES } from "./consts";
+import { useState } from 'react';
+import Header from './components/Header';
+import Field from './components/Field';
+import './App.css';
+import { GameContext } from './context';
+import { QUANTITY_MINES } from './consts';
 
 function App() {
   const [restart, setRestart] = useState(false);
@@ -35,7 +35,7 @@ function App() {
         setSeconds,
         clicked,
         gameResult,
-        setGameResult
+        setGameResult,
       }}
     >
       <div

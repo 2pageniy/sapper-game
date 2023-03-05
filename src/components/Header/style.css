@@ -9,10 +9,6 @@
   box-shadow: -1px -1px 0 1px #7e7e7e, 0 0 0 2px white;
 }
 
-.timer {
-
-}
-
 .smile {
   width: 40px;
   height: 40px;
@@ -34,54 +30,55 @@
   background-position: -43px -39px;
 }
 
-.mine {
+.mine,
+.timer {
   display: flex;
-  margin: auto 0;
+  margin: auto 10px;
 }
 
-.mine .pos {
+.pos {
   width: 20px;
   height: 35px;
   background: url('../../assets/image/minesweeper-sprites_9TPZzv3.png');
   background-size: 215px 130px;
 }
 
-.mine .pos-0 {
+.pos-0 {
   background-position: -195px 0px;
 }
 
-.mine .pos-1 {
+.pos-1 {
   background-position: 0 0;
 }
 
-.mine .pos-2 {
+.pos-2 {
   background-position: -22px 0px;
 }
 
-.mine .pos-3 {
+.pos-3 {
   background-position: -43px 0px;
 }
 
-.mine .pos-4 {
-  background-position: -65px 0px;
+.pos-4 {
+  background-position: -65.5px 0px;
 }
 
-.mine .pos-5 {
+.pos-5 {
   background-position: -87px 0px;
 }
 
-.mine .pos-6 {
+.pos-6 {
   background-position: -108px 0px;
 }
 
-.mine .pos-7 {
+.pos-7 {
   background-position: -130px 0px;
 }
 
-.mine .pos-8 {
+.pos-8 {
   background-position: -152px 0px;
 }
 
-.mine .pos-9 {
-  background-position: -174px 0px;
+.pos-9 {
+  background-position: -173px 0px;
 }

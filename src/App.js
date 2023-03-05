@@ -9,6 +9,7 @@ function App() {
   const [restart, setRestart] = useState(false);
   const [lose, setLose] = useState(false);
   const [win, setWin] = useState(false);
+  const [seconds, setSeconds] = useState(0);
   const [mines, setMines] = useState(QUANTITY_MINES);
 
   return (
@@ -22,6 +23,8 @@ function App() {
         setWin,
         mines,
         setMines,
+        seconds,
+        setSeconds
       }}
     >
       <div className="wrapper-app">

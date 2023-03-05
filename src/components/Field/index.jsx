@@ -8,9 +8,11 @@ import './style.css'
 function Field() {
   const [cells, setCells] = useState(Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD).fill(0)));
   const [filledCells, setFilledCells] = useState(false);
-  const {lose, setLose, restart, setRestart, setMines, mines} = useContext(GameContext);
+  const {lose, setLose, restart, setRestart, setMines, mines, setSeconds} = useContext(GameContext);
+  const [timer, setTimer] = useState();
 
   const fillCells = (index) => {
+    setTimer(setInterval(() => setSeconds((prev) => prev !== 999 ? prev + 1 : prev), 1000));
     setFilledCells(true);
     const temp = Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD));
     let i = 0;
@@ -83,6 +85,7 @@ function Field() {
 
     if (temp[i][j].cell === 'mine') {
       setLose(true);
+      clearInterval(timer);
       temp[i][j].activate = true;
       for (let i = 0; i < temp.length; i++) {
         for (let j = 0; j < temp[i].length; j++) {
@@ -119,6 +122,8 @@ function Field() {
       setCells(Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD).fill(0)));
       setLose(false);
       setMines(QUANTITY_MINES);
+      setSeconds(0);
+      clearInterval(timer);
     }
   }, [restart])
 

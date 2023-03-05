@@ -7,7 +7,7 @@
   cursor: pointer;
 }
 
-.cell:active {
+.cell.down {
   background-position: -26.5px -79px;
 }
 

@@ -16,14 +16,19 @@
   background: url('../../assets/image/minesweeper-sprites_9TPZzv3.png');
   background-size: 215px 130px;
   background-position: -1px -39px;
+  cursor: pointer;
 }
 
-.smile-lose {
+.smile.lose {
   background-position: -169px -39px;
 }
 
-.smile-win {
+.smile.win {
   background-position: -127px -39px;
+}
+
+.smile-clicked {
+  background-position: -85px -39px;
 }
 
 .smile:active {

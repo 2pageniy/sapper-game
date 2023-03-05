@@ -8,7 +8,7 @@ import './style.css'
 function Field() {
   const [cells, setCells] = useState(Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD).fill(0)));
   const [filledCells, setFilledCells] = useState(false);
-  const {lose, setLose, restart, setRestart, setMines, mines, setSeconds} = useContext(GameContext);
+  const {setGameResult, restart, setRestart, setMines, mines, setSeconds} = useContext(GameContext);
   const [timer, setTimer] = useState();
 
   const fillCells = (index) => {
@@ -25,7 +25,7 @@ function Field() {
       if (!temp[randomCellI][randomCellJ]) {
         temp[randomCellI][randomCellJ] = {
           cell: 'mine',
-          clicked: false,
+          open: false,
           flag: 0,
           activate: false,
           wrong: false,
@@ -52,7 +52,7 @@ function Field() {
 
         temp[i][j] = {
           cell: allMines,
-          clicked: false,
+          open: false,
           flag: 0,
           activate: false,
           wrong: false,
@@ -70,21 +70,22 @@ function Field() {
     const temp = [...cells];
     const i = idx[0];
     const j = idx[1];
-    temp[i][j].clicked = true;
+    temp[i][j].open = true;
 
     if (temp[i][j].cell === 0) {
-      if (temp[i]?.[j + 1]     && !temp[i]?.[j + 1]?.clicked)     clickCellHandler([i, j + 1], temp);
-      if (temp[i]?.[j - 1]     && !temp[i]?.[j - 1]?.clicked)     clickCellHandler([i, j - 1], temp);
-      if (temp[i + 1]?.[j - 1] && !temp[i + 1]?.[j - 1]?.clicked) clickCellHandler([i + 1, j - 1], temp);
-      if (temp[i + 1]?.[j]     && !temp[i + 1]?.[j]?.clicked)     clickCellHandler([i + 1, j], temp);
-      if (temp[i + 1]?.[j + 1] && !temp[i + 1]?.[j + 1]?.clicked) clickCellHandler([i + 1, j + 1], temp);
-      if (temp[i - 1]?.[j - 1] && !temp[i - 1]?.[j - 1]?.clicked) clickCellHandler([i - 1, j - 1], temp);
-      if (temp[i - 1]?.[j]     && !temp[i - 1]?.[j]?.clicked)     clickCellHandler([i - 1, j], temp);
-      if (temp[i - 1]?.[j + 1] && !temp[i - 1]?.[j + 1]?.clicked) clickCellHandler([i - 1, j + 1], temp);
+      // Проверяем чтобы поле существовало, было закрыто и не было на нем флага или вопроса
+      if (temp[i]?.[j + 1]     && !temp[i][j + 1]?.open     && !temp[i][j + 1]?.flag)     clickCellHandler([i, j + 1], temp);
+      if (temp[i]?.[j - 1]     && !temp[i][j - 1]?.open     && !temp[i][j - 1]?.flag)     clickCellHandler([i, j - 1], temp);
+      if (temp[i + 1]?.[j - 1] && !temp[i + 1][j - 1]?.open && !temp[i + 1][j - 1]?.flag) clickCellHandler([i + 1, j - 1], temp);
+      if (temp[i + 1]?.[j]     && !temp[i + 1][j]?.open     && !temp[i + 1][j]?.flag)     clickCellHandler([i + 1, j], temp);
+      if (temp[i + 1]?.[j + 1] && !temp[i + 1][j + 1]?.open && !temp[i + 1][j + 1].flag)  clickCellHandler([i + 1, j + 1], temp);
+      if (temp[i - 1]?.[j - 1] && !temp[i - 1][j - 1]?.open && !temp[i - 1][j - 1]?.flag) clickCellHandler([i - 1, j - 1], temp);
+      if (temp[i - 1]?.[j]     && !temp[i - 1][j]?.open     && !temp[i - 1][j]?.flag)     clickCellHandler([i - 1, j], temp);
+      if (temp[i - 1]?.[j + 1] && !temp[i - 1][j + 1]?.open && !temp[i - 1][j + 1]?.flag) clickCellHandler([i - 1, j + 1], temp);
     }
 
     if (temp[i][j].cell === 'mine') {
-      setLose(true);
+      setGameResult('lose');
       clearInterval(timer);
       temp[i][j].activate = true;
       for (let i = 0; i < temp.length; i++) {
@@ -93,11 +94,26 @@ function Field() {
             temp[i][j].wrong = true;
           }
           if (temp[i][j].cell === 'mine') {
-            temp[i][j].clicked = true;
+            temp[i][j].open = true;
           }
         }
       }
+    } else {
+      let count = 0;
+      for (let i = 0; i < temp.length; i++) {
+        for (let j = 0; j < temp[i].length; j++) {
+          if (!temp[i][j].open) {
+            count++;
+          }
+        }
+      }
+      if (count === QUANTITY_MINES) {
+        clearInterval(timer);
+        setGameResult('win');
+      }
     }
+
+    
     setCells([...temp])
   };
 
@@ -120,7 +136,7 @@ function Field() {
       setFilledCells(false);
       setRestart(false);
       setCells(Array.from(Array(SIZE_FIELD), () => new Array(SIZE_FIELD).fill(0)));
-      setLose(false);
+      setGameResult(null);
       setMines(QUANTITY_MINES);
       setSeconds(0);
       clearInterval(timer);
@@ -140,7 +156,6 @@ function Field() {
             flag={filledCells}
             clickedCell={clickedCell}
             rightClickCell={rightClickCell}
-            lose={lose}
           />
           )
         )

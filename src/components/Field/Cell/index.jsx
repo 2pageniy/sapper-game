@@ -1,14 +1,24 @@
 import { useContext, useState } from 'react';
-import { GameContext } from '../../../context';
+import classNames from 'classnames';
 import './style.css'
+import { GameContext } from '../../../context';
 
-function Cell({ index, fillCells, cell, flag, clickedCell, rightClickCell }) {
+function Cell({ 
+    index, 
+    fillCells, 
+    cell, 
+    flag, 
+    clickedCell, 
+    rightClickCell 
+  }) {
   const [mouseDown, setMouseDown] = useState(false);
   const { clicked, gameResult } = useContext(GameContext);
 
   const contextHandler = (e) => {
     e.preventDefault();
-    if (!cell || cell.open || gameResult) return;
+    if (!cell || cell.open || gameResult) {
+      return;
+    }
     rightClickCell(index)
   };
 
@@ -43,8 +53,15 @@ function Cell({ index, fillCells, cell, flag, clickedCell, rightClickCell }) {
       setMouseDown(true);
     }
   };
-  
-  const classCell = `cell${cell.open ? ` open-${cell.cell}` : ''}${mouseDown ? ' down' : ''}${cell.flag ? ` flag-${cell.flag}` : ''}${cell.activate ? ` activate-mine` : ''} ${gameResult || ''}${cell.wrong ? ' wrong' : ''}`;
+
+
+  const classCell = classNames('cell', gameResult, {
+    [`open-${cell.cell}`] : cell.open,
+    'down'                : mouseDown,
+    [`flag-${cell.flag}`] : cell.flag,
+    'activate-mine'       : cell.activate,
+    'wrong'               : cell.wrong
+  });
 
   return (
     <div

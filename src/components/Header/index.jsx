@@ -1,11 +1,18 @@
 import { useContext } from 'react';
-import { GameContext } from '../../context';
+import classNames from 'classnames';
 import './style.css';
+import { GameContext } from '../../context';
 
 function Header() {
-  const {gameResult, setRestart, mines, seconds, clicked} = useContext(GameContext);
+  const {
+    gameResult, 
+    setRestart, 
+    mines, 
+    seconds, 
+    clicked
+  } = useContext(GameContext);
 
-  const classNameSmile = `smile ${gameResult || ''}${clicked && !gameResult ? ' smile-clicked' : ''}`;
+  const classNameSmile = classNames('smile', gameResult, {'smile-clicked': clicked && !gameResult});
 
   return (
     <header className="header">

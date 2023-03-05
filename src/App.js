@@ -1,14 +1,12 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Field from "./components/Field";
-import { GameContext } from "./context";
 import "./App.css";
+import { GameContext } from "./context";
 import { QUANTITY_MINES } from "./consts";
 
 function App() {
   const [restart, setRestart] = useState(false);
-  // const [lose, setLose] = useState(false);
-  // const [win, setWin] = useState(false);
   const [gameResult, setGameResult] = useState(null);
   const [seconds, setSeconds] = useState(0);
   const [mines, setMines] = useState(QUANTITY_MINES);
